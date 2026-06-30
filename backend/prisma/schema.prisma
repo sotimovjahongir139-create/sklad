@@ -1,0 +1,267 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  OPERATOR
+  VIEWER
+}
+
+enum ZoneType {
+  RECEIVING
+  STORAGE
+  STAGING
+  SHIPPING
+  QUARANTINE
+}
+
+enum InboundStatus {
+  PENDING
+  IN_TRANSIT
+  RECEIVING
+  COMPLETED
+  CANCELLED
+}
+
+enum OutboundStatus {
+  PENDING
+  PICKING
+  PACKING
+  SHIPPED
+  CANCELLED
+}
+
+enum Priority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum MovementType {
+  INBOUND
+  OUTBOUND
+  TRANSFER
+  ADJUSTMENT
+  RETURN
+}
+
+enum NotificationType {
+  LOW_STOCK
+  INBOUND_RECEIVED
+  OUTBOUND_SHIPPED
+  MOVEMENT_COMPLETED
+  SYSTEM
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(OPERATOR)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  inboundOrders  InboundOrder[]
+  outboundOrders OutboundOrder[]
+  movements      Movement[]
+  notifications  Notification[]
+  auditLogs      AuditLog[]
+  refreshTokens  RefreshToken[]
+}
+
+model ProductModel {
+  id          String   @id @default(cuid())
+  sku         String   @unique
+  name        String
+  description String?
+  category    String?
+  unit        String   @default("pcs")
+  minStock    Int      @default(0)
+  maxStock    Int?
+  weight      Float?
+  dimensions  Json?
+  imageUrl    String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  inventory     Inventory[]
+  inboundItems  InboundItem[]
+  outboundItems OutboundItem[]
+  movements     Movement[]
+}
+
+model Zone {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  type      ZoneType @default(STORAGE)
+  capacity  Int?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  locations Location[]
+}
+
+model Location {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  zoneId    String
+  zone      Zone     @relation(fields: [zoneId], references: [id])
+  aisle     String?
+  shelf     String?
+  bin       String?
+  capacity  Int?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  inventory     Inventory[]
+  movementsFrom Movement[] @relation("FromLocation")
+  movementsTo   Movement[] @relation("ToLocation")
+}
+
+model Inventory {
+  id          String       @id @default(cuid())
+  modelId     String
+  model       ProductModel @relation(fields: [modelId], references: [id])
+  locationId  String
+  location    Location     @relation(fields: [locationId], references: [id])
+  quantity    Int          @default(0)
+  reservedQty Int          @default(0)
+  updatedAt   DateTime     @updatedAt
+
+  @@unique([modelId, locationId])
+}
+
+model InboundOrder {
+  id          String        @id @default(cuid())
+  orderNumber String        @unique
+  supplier    String?
+  status      InboundStatus @default(PENDING)
+  expectedAt  DateTime?
+  receivedAt  DateTime?
+  notes       String?
+  createdById String
+  createdBy   User          @relation(fields: [createdById], references: [id])
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  items     InboundItem[]
+  movements Movement[]
+}
+
+model InboundItem {
+  id          String       @id @default(cuid())
+  orderId     String
+  order       InboundOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  modelId     String
+  model       ProductModel @relation(fields: [modelId], references: [id])
+  expectedQty Int
+  receivedQty Int          @default(0)
+
+  @@unique([orderId, modelId])
+}
+
+model OutboundOrder {
+  id          String         @id @default(cuid())
+  orderNumber String         @unique
+  customer    String?
+  status      OutboundStatus @default(PENDING)
+  priority    Priority       @default(NORMAL)
+  requestedAt DateTime?
+  shippedAt   DateTime?
+  notes       String?
+  createdById String
+  createdBy   User           @relation(fields: [createdById], references: [id])
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  items     OutboundItem[]
+  movements Movement[]
+}
+
+model OutboundItem {
+  id           String        @id @default(cuid())
+  orderId      String
+  order        OutboundOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  modelId      String
+  model        ProductModel  @relation(fields: [modelId], references: [id])
+  requestedQty Int
+  pickedQty    Int           @default(0)
+
+  @@unique([orderId, modelId])
+}
+
+model Movement {
+  id             String         @id @default(cuid())
+  type           MovementType
+  modelId        String
+  model          ProductModel   @relation(fields: [modelId], references: [id])
+  fromLocationId String?
+  fromLocation   Location?      @relation("FromLocation", fields: [fromLocationId], references: [id])
+  toLocationId   String?
+  toLocation     Location?      @relation("ToLocation", fields: [toLocationId], references: [id])
+  quantity       Int
+  inboundId      String?
+  inbound        InboundOrder?  @relation(fields: [inboundId], references: [id])
+  outboundId     String?
+  outbound       OutboundOrder? @relation(fields: [outboundId], references: [id])
+  performedById  String
+  performedBy    User           @relation(fields: [performedById], references: [id])
+  notes          String?
+  createdAt      DateTime       @default(now())
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id])
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  data      Json?
+  createdAt DateTime         @default(now())
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  action     String
+  resource   String
+  resourceId String?
+  before     Json?
+  after      Json?
+  ip         String?
+  createdAt  DateTime @default(now())
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model InventorySnapshot {
+  id        String   @id @default(cuid())
+  date      DateTime @default(now())
+  data      Json
+  summary   Json?
+  createdAt DateTime @default(now())
+}

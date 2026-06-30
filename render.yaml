@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: sklad-backend
+    env: node
+    region: frankfurt
+    plan: starter
+    buildCommand: cd backend && npm install && npx prisma generate && npx prisma migrate deploy
+    startCommand: cd backend && node src/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sklad-db
+          property: connectionString
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: COOKIE_SECRET
+        generateValue: true
+      - key: FRONTEND_URL
+        value: https://sklad-frontend.onrender.com
+
+  - type: web
+    name: sklad-frontend
+    env: static
+    region: frankfurt
+    plan: starter
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://sklad-backend.onrender.com
+      - key: VITE_WS_URL
+        value: wss://sklad-backend.onrender.com
+
+databases:
+  - name: sklad-db
+    plan: starter
+    region: frankfurt
+    databaseName: sklad_db
+    user: sklad_user
