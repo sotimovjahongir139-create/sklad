@@ -6,8 +6,8 @@ const globalSearch = async (query, types = ['models', 'inbound', 'outbound', 'lo
 
   if (types.includes('models')) {
     results.models = await prisma.productModel.findMany({
-      where: { OR: [{ name: q }, { sku: q }, { category: q }], isActive: true },
-      select: { id: true, sku: true, name: true, category: true },
+      where: { OR: [{ name: q }, { modelCode: q }, { category: q }], isActive: true },
+      select: { id: true, modelCode: true, name: true, category: true },
       take: 10,
     });
   }

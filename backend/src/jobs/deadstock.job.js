@@ -11,7 +11,7 @@ const checkDeadstock = async () => {
         type: 'SYSTEM',
         title: 'Deadstock Alert',
         message: `${deadstock.length} items have had no movement in 90+ days`,
-        data: { count: deadstock.length, topItems: deadstock.slice(0, 5).map((d) => ({ sku: d.model.sku, daysStagnant: d.daysStagnant })) },
+        data: { count: deadstock.length, topItems: deadstock.slice(0, 5).map((d) => ({ modelCode: d.model.modelCode, daysStagnant: d.daysStagnant })) },
       });
       logger.info(`Deadstock check: ${deadstock.length} items flagged`);
     }

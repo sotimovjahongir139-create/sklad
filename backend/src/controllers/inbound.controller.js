@@ -13,7 +13,7 @@ const list = async (req, res, next) => {
     };
     const [total, data] = await Promise.all([
       prisma.inboundOrder.count({ where }),
-      prisma.inboundOrder.findMany({ where, include: { createdBy: { select: { id: true, name: true } }, items: { include: { model: { select: { id: true, sku: true, name: true } } } } }, orderBy: { createdAt: 'desc' }, skip, take: limit }),
+      prisma.inboundOrder.findMany({ where, include: { createdBy: { select: { id: true, name: true } }, items: { include: { model: { select: { id: true, modelCode: true, name: true } } } } }, orderBy: { createdAt: 'desc' }, skip, take: limit }),
     ]);
     res.json({ success: true, data, pagination: buildPagination(total, page, limit) });
   } catch (err) { next(err); }

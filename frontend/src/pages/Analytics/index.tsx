@@ -74,7 +74,7 @@ export default function Analytics() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-100 dark:border-gray-800">
-                  {['SKU', 'Nomi', 'Joy', 'Miqdor', 'Harakatsiz kunlar'].map((h) => (
+                  {['MODEL', 'Nomi', 'Joy', 'Miqdor', 'Harakatsiz kunlar'].map((h) => (
                     <th key={h} className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">{h}</th>
                   ))}
                 </tr>
@@ -82,7 +82,7 @@ export default function Analytics() {
               <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
                 {deadstock.slice(0, 20).map((item: any, i: number) => (
                   <tr key={i} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
-                    <td className="px-3 py-2 font-mono text-blue-600">{item.model?.sku}</td>
+                    <td className="px-3 py-2 font-mono text-blue-600">{item.model?.modelCode}</td>
                     <td className="px-3 py-2 text-gray-900 dark:text-white">{item.model?.name}</td>
                     <td className="px-3 py-2 font-mono text-gray-500">{item.location?.code}</td>
                     <td className="px-3 py-2 font-semibold">{item.quantity}</td>

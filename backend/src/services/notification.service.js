@@ -25,8 +25,8 @@ const checkLowStock = async (modelId) => {
     await notifyAllManagers({
       type: 'LOW_STOCK',
       title: 'Low Stock Alert',
-      message: `${model.name} (${model.sku}) has ${totalQty} units remaining (min: ${model.minStock})`,
-      data: { modelId, sku: model.sku, currentQty: totalQty, minStock: model.minStock },
+      message: `${model.name} (${model.modelCode}) has ${totalQty} units remaining (min: ${model.minStock})`,
+      data: { modelId, modelCode: model.modelCode, currentQty: totalQty, minStock: model.minStock },
     });
   }
 };

@@ -14,7 +14,7 @@ const list = async (req, res, next) => {
     };
     const [total, data] = await Promise.all([
       prisma.outboundOrder.count({ where }),
-      prisma.outboundOrder.findMany({ where, include: { createdBy: { select: { id: true, name: true } }, items: { include: { model: { select: { id: true, sku: true, name: true } } } } }, orderBy: [{ priority: 'desc' }, { createdAt: 'desc' }], skip, take: limit }),
+      prisma.outboundOrder.findMany({ where, include: { createdBy: { select: { id: true, name: true } }, items: { include: { model: { select: { id: true, modelCode: true, name: true } } } } }, orderBy: [{ priority: 'desc' }, { createdAt: 'desc' }], skip, take: limit }),
     ]);
     res.json({ success: true, data, pagination: buildPagination(total, page, limit) });
   } catch (err) { next(err); }

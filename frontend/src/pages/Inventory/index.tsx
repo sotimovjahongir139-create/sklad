@@ -61,11 +61,11 @@ export default function Inventory() {
         ) : tab === 'all' ? (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead><tr className="border-b border-gray-100 dark:border-gray-800">{['SKU', 'Nomi', 'Joy', 'Zona', 'Miqdor', 'Band'].map((h) => (<th key={h} className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{h}</th>))}</tr></thead>
+              <thead><tr className="border-b border-gray-100 dark:border-gray-800">{['MODEL', 'Nomi', 'Joy', 'Zona', 'Miqdor', 'Band'].map((h) => (<th key={h} className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">{h}</th>))}</tr></thead>
               <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
                 {(items as any[]).map((inv) => (
                   <tr key={inv.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
-                    <td className="px-4 py-3 text-sm font-mono text-blue-600">{inv.model?.sku}</td>
+                    <td className="px-4 py-3 text-sm font-mono text-blue-600">{inv.model?.modelCode}</td>
                     <td className="px-4 py-3 text-sm text-gray-900 dark:text-white">{inv.model?.name}</td>
                     <td className="px-4 py-3 text-sm font-mono text-gray-600">{inv.location?.code}</td>
                     <td className="px-4 py-3 text-sm text-gray-500">{inv.location?.zone?.name}</td>
@@ -81,7 +81,7 @@ export default function Inventory() {
             {(items as any[]).map((item, i) => (
               <div key={i} className="px-4 py-3 flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">{item.model?.name} <span className="font-mono text-xs text-gray-400">({item.model?.sku})</span></p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">{item.model?.name} <span className="font-mono text-xs text-gray-400">({item.model?.modelCode})</span></p>
                   <p className="text-xs text-gray-400 mt-0.5">Min zaxira: {item.minStock}</p>
                 </div>
                 <span className={`font-bold text-lg ${item.totalQty === 0 ? 'text-red-600' : 'text-orange-500'}`}>{item.totalQty}</span>

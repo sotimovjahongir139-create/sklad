@@ -100,7 +100,7 @@ export default function WarehouseMap() {
                   {selected.items.map((item: any) => (
                     <div key={item.modelId} className="flex justify-between items-center">
                       <div>
-                        <p className="text-xs font-mono text-blue-600">{item.sku}</p>
+                        <p className="text-xs font-mono text-blue-600">{item.modelCode}</p>
                         <p className="text-xs text-gray-600 dark:text-gray-300">{item.name}</p>
                       </div>
                       <span className="text-sm font-bold text-gray-900 dark:text-white">{item.quantity}</span>

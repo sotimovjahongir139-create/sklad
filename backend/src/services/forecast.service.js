@@ -20,7 +20,7 @@ const forecastDemand = async (modelId, periods = 7) => {
 
   const dailyDemand = Object.values(byDay);
   if (dailyDemand.length === 0) {
-    return { model: { id: model.id, sku: model.sku, name: model.name }, historicalAvgDaily: 0, forecast: [] };
+    return { model: { id: model.id, modelCode: model.modelCode, name: model.name }, historicalAvgDaily: 0, forecast: [] };
   }
 
   const avg = dailyDemand.reduce((a, b) => a + b, 0) / dailyDemand.length;
@@ -37,7 +37,7 @@ const forecastDemand = async (modelId, periods = 7) => {
   const totalStock = currentStock._sum.quantity || 0;
   const daysOfStock = avg > 0 ? Math.floor(totalStock / avg) : null;
 
-  return { model: { id: model.id, sku: model.sku, name: model.name }, historicalAvgDaily: parseFloat(avg.toFixed(2)), stdDev: parseFloat(stdDev.toFixed(2)), currentStock: totalStock, daysOfStockRemaining: daysOfStock, forecast };
+  return { model: { id: model.id, modelCode: model.modelCode, name: model.name }, historicalAvgDaily: parseFloat(avg.toFixed(2)), stdDev: parseFloat(stdDev.toFixed(2)), currentStock: totalStock, daysOfStockRemaining: daysOfStock, forecast };
 };
 
 module.exports = { forecastDemand };

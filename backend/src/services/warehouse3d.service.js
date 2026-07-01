@@ -9,7 +9,7 @@ const buildWarehouseMap = async () => {
         include: {
           inventory: {
             where: { quantity: { gt: 0 } },
-            include: { model: { select: { sku: true, name: true, category: true } } },
+            include: { model: { select: { modelCode: true, name: true, category: true } } },
           },
         },
       },
@@ -38,7 +38,7 @@ const buildWarehouseMap = async () => {
         totalQty,
         occupancy,
         position: { x: locIdx % 4 * 3, y: Math.floor(locIdx / 4) * 3, z: 0 },
-        items: loc.inventory.map((inv) => ({ modelId: inv.modelId, sku: inv.model.sku, name: inv.model.name, quantity: inv.quantity })),
+        items: loc.inventory.map((inv) => ({ modelId: inv.modelId, modelCode: inv.model.modelCode, name: inv.model.name, quantity: inv.quantity })),
       };
     }),
   }));

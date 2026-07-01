@@ -2,7 +2,7 @@ const prisma = require('../config/database');
 const { success, created, notFound, badRequest } = require('../utils/response');
 const { parsePagination, buildPagination, parseSorting } = require('../utils/pagination');
 
-const ALLOWED_SORT = ['name', 'sku', 'category', 'createdAt'];
+const ALLOWED_SORT = ['name', 'modelCode', 'category', 'createdAt'];
 
 const list = async (req, res, next) => {
   try {
@@ -11,7 +11,7 @@ const list = async (req, res, next) => {
     const { search, category, isActive } = req.query;
 
     const where = {
-      ...(search && { OR: [{ name: { contains: search, mode: 'insensitive' } }, { sku: { contains: search, mode: 'insensitive' } }] }),
+      ...(search && { OR: [{ name: { contains: search, mode: 'insensitive' } }, { modelCode: { contains: search, mode: 'insensitive' } }] }),
       ...(category && { category }),
       ...(isActive !== undefined && { isActive: isActive === 'true' }),
     };
@@ -35,17 +35,17 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   try {
-    const { sku, name, description, category, unit, minStock, maxStock, weight, dimensions } = req.body;
-    if (!sku || !name) return badRequest(res, 'SKU and name required');
-    const model = await prisma.productModel.create({ data: { sku, name, description, category, unit, minStock: minStock || 0, maxStock, weight, dimensions } });
+    const { modelCode, name, description, category, unit, minStock, maxStock, weight, dimensions } = req.body;
+    if (!modelCode || !name) return badRequest(res, 'Model raqami va nomi majburiy');
+    const model = await prisma.productModel.create({ data: { modelCode, name, description, category, unit, minStock: minStock || 0, maxStock, weight, dimensions } });
     created(res, model);
   } catch (err) { next(err); }
 };
 
 const update = async (req, res, next) => {
   try {
-    const { sku, name, description, category, unit, minStock, maxStock, weight, dimensions, isActive } = req.body;
-    const model = await prisma.productModel.update({ where: { id: req.params.id }, data: { sku, name, description, category, unit, minStock, maxStock, weight, dimensions, isActive } });
+    const { modelCode, name, description, category, unit, minStock, maxStock, weight, dimensions, isActive } = req.body;
+    const model = await prisma.productModel.update({ where: { id: req.params.id }, data: { modelCode, name, description, category, unit, minStock, maxStock, weight, dimensions, isActive } });
     success(res, model);
   } catch (err) { next(err); }
 };

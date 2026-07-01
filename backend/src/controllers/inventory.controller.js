@@ -13,7 +13,7 @@ const list = async (req, res, next) => {
       quantity: { gt: 0 },
       ...(locationId && { locationId }),
       ...(zoneId && { location: { zoneId } }),
-      ...(search && { model: { OR: [{ name: { contains: search, mode: 'insensitive' } }, { sku: { contains: search, mode: 'insensitive' } }] } }),
+      ...(search && { model: { OR: [{ name: { contains: search, mode: 'insensitive' } }, { modelCode: { contains: search, mode: 'insensitive' } }] } }),
       ...(category && { model: { category } }),
     };
 

@@ -1,6 +1,6 @@
 const prisma = require('../config/database');
 
-const findBySku = (sku) => prisma.productModel.findUnique({ where: { sku } });
+const findByModelCode = (modelCode) => prisma.productModel.findUnique({ where: { modelCode } });
 const findById = (id) => prisma.productModel.findUnique({ where: { id } });
 const findActive = () => prisma.productModel.findMany({ where: { isActive: true }, orderBy: { name: 'asc' } });
 
@@ -14,4 +14,4 @@ const findWithLowStock = async () => {
   return low;
 };
 
-module.exports = { findBySku, findById, findActive, findWithLowStock };
+module.exports = { findByModelCode, findById, findActive, findWithLowStock };

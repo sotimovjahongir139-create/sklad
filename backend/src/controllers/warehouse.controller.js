@@ -27,7 +27,7 @@ const listLocations = async (req, res, next) => {
   try {
     const { zoneId, isActive } = req.query;
     const where = { ...(zoneId && { zoneId }), ...(isActive !== undefined && { isActive: isActive === 'true' }) };
-    const locations = await prisma.location.findMany({ where, include: { zone: true, inventory: { include: { model: { select: { sku: true, name: true } } } } }, orderBy: { code: 'asc' } });
+    const locations = await prisma.location.findMany({ where, include: { zone: true, inventory: { include: { model: { select: { modelCode: true, name: true } } } } }, orderBy: { code: 'asc' } });
     success(res, locations);
   } catch (err) { next(err); }
 };

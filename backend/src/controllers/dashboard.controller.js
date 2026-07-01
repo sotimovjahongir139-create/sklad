@@ -36,7 +36,7 @@ const stats = async (req, res, next) => {
 
 const recentActivity = async (req, res, next) => {
   try {
-    const movements = await prisma.movement.findMany({ take: 10, orderBy: { createdAt: 'desc' }, include: { model: { select: { sku: true, name: true } }, performedBy: { select: { name: true } }, fromLocation: { select: { code: true } }, toLocation: { select: { code: true } } } });
+    const movements = await prisma.movement.findMany({ take: 10, orderBy: { createdAt: 'desc' }, include: { model: { select: { modelCode: true, name: true } }, performedBy: { select: { name: true } }, fromLocation: { select: { code: true } }, toLocation: { select: { code: true } } } });
     success(res, movements);
   } catch (err) { next(err); }
 };
@@ -49,7 +49,7 @@ const alerts = async (req, res, next) => {
       const agg = await prisma.inventory.aggregate({ where: { modelId: m.id }, _sum: { quantity: true } });
       const qty = agg._sum.quantity || 0;
       if (qty <= m.minStock) {
-        alerts.push({ type: 'LOW_STOCK', severity: qty === 0 ? 'critical' : 'warning', model: { id: m.id, sku: m.sku, name: m.name }, currentQty: qty, minStock: m.minStock });
+        alerts.push({ type: 'LOW_STOCK', severity: qty === 0 ? 'critical' : 'warning', model: { id: m.id, modelCode: m.modelCode, name: m.name }, currentQty: qty, minStock: m.minStock });
       }
     }
     success(res, alerts);

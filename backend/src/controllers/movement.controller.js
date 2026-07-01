@@ -16,7 +16,7 @@ const list = async (req, res, next) => {
 
     const [total, data] = await Promise.all([
       prisma.movement.count({ where }),
-      prisma.movement.findMany({ where, include: { model: { select: { id: true, sku: true, name: true } }, fromLocation: true, toLocation: true, performedBy: { select: { id: true, name: true } } }, orderBy: { createdAt: 'desc' }, skip, take: limit }),
+      prisma.movement.findMany({ where, include: { model: { select: { id: true, modelCode: true, name: true } }, fromLocation: true, toLocation: true, performedBy: { select: { id: true, name: true } } }, orderBy: { createdAt: 'desc' }, skip, take: limit }),
     ]);
 
     res.json({ success: true, data, pagination: buildPagination(total, page, limit) });

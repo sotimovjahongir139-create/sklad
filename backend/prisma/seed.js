@@ -3,6 +3,16 @@ const bcrypt = require('bcryptjs');
 
 const prisma = new PrismaClient();
 
+const MODEL_LIST = [
+  '1030', '1107', '1207', '1408', '1508',
+  '1603 padosh', '1603 stilka',
+  '180', '1975', '202',
+  '2099 padosh', '2099 stilka',
+  '21128', '2283',
+  '23338 padosh', '23338 stilka',
+  '2504', '3001', '3215', '4100',
+];
+
 async function main() {
   const adminPass = await bcrypt.hash('admin123', 12);
   const managerPass = await bcrypt.hash('manager123', 12);
@@ -48,22 +58,18 @@ async function main() {
     await prisma.location.upsert({ where: { code: loc.code }, update: {}, create: loc });
   }
 
-  const categories = ['Electronics', 'Furniture', 'Clothing', 'Food', 'Tools'];
   const models = [];
-  for (let i = 1; i <= 20; i++) {
-    const sku = `SKU-${String(i).padStart(4, '0')}`;
+  for (const mc of MODEL_LIST) {
     const model = await prisma.productModel.upsert({
-      where: { sku },
+      where: { modelCode: mc },
       update: {},
       create: {
-        sku,
-        name: `Product ${i}`,
-        description: `Sample product ${i} description`,
-        category: categories[i % categories.length],
-        unit: i % 3 === 0 ? 'kg' : 'pcs',
+        modelCode: mc,
+        name: mc,
+        category: mc.includes('padosh') ? 'Padosh' : mc.includes('stilka') ? 'Stilka' : 'Umumiy',
+        unit: 'dona',
         minStock: 10,
         maxStock: 500,
-        weight: Math.round(Math.random() * 10 * 10) / 10,
       },
     });
     models.push(model);
@@ -81,6 +87,7 @@ async function main() {
   }
 
   console.log('Seed complete:', { admin: admin.email, manager: manager.email, operator: operator.email });
+  console.log('Models seeded:', MODEL_LIST.length);
 }
 
 main()

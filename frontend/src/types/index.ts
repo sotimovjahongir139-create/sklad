@@ -17,7 +17,7 @@ export interface User {
 
 export interface ProductModel {
   id: string;
-  sku: string;
+  modelCode: string;
   name: string;
   description?: string;
   category?: string;
@@ -119,7 +119,7 @@ export interface Movement {
   id: string;
   type: MovementType;
   modelId: string;
-  model?: Pick<ProductModel, 'id' | 'sku' | 'name'>;
+  model?: Pick<ProductModel, 'id' | 'modelCode' | 'name'>;
   fromLocationId?: string;
   fromLocation?: Pick<Location, 'id' | 'code'>;
   toLocationId?: string;

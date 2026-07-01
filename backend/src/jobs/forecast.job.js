@@ -12,7 +12,7 @@ const runForecast = async () => {
     for (const model of models) {
       const forecast = await forecastDemand(model.id, 7);
       if (forecast.daysOfStockRemaining !== null && forecast.daysOfStockRemaining < 14) {
-        alerts.push({ sku: model.sku, name: model.name, daysRemaining: forecast.daysOfStockRemaining, currentStock: forecast.currentStock });
+        alerts.push({ modelCode: model.modelCode, name: model.name, daysRemaining: forecast.daysOfStockRemaining, currentStock: forecast.currentStock });
       }
     }
 

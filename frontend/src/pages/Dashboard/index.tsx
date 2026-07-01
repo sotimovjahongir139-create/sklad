@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Package, Boxes, ArrowDownToLine, ArrowUpFromLine, Activity, AlertTriangle } from 'lucide-react';
+import { Layers, Box, ArrowDownToLine, ArrowUpFromLine, Activity, AlertTriangle } from 'lucide-react';
 import { getDashboardStats, getRecentActivity, getDashboardAlerts } from '@/services/api/dashboard';
 import { MOVEMENT_TYPE_LABELS } from '@/constants';
 import { formatDistanceToNow } from 'date-fns';
@@ -36,8 +36,8 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-        <StatCard label="Jami mahsulot" value={statsLoading ? '...' : (stats?.totalInventoryQty ?? 0).toLocaleString()} icon={Boxes} color="bg-blue-500" />
-        <StatCard label="Modellar soni" value={statsLoading ? '...' : stats?.totalModels ?? 0} icon={Package} color="bg-purple-500" />
+        <StatCard label="Jami mahsulot" value={statsLoading ? '...' : (stats?.totalInventoryQty ?? 0).toLocaleString()} icon={Layers} color="bg-blue-500" />
+        <StatCard label="Modellar soni" value={statsLoading ? '...' : stats?.totalModels ?? 0} icon={Box} color="bg-purple-500" />
         <StatCard label="Kirim kutilmoqda" value={statsLoading ? '...' : stats?.inboundPending ?? 0} icon={ArrowDownToLine} color="bg-green-500" />
         <StatCard label="Chiqim kutilmoqda" value={statsLoading ? '...' : stats?.outboundPending ?? 0} icon={ArrowUpFromLine} color="bg-orange-500" />
         <StatCard label="Bugungi harakatlar" value={statsLoading ? '...' : stats?.todayMovements ?? 0} icon={Activity} color="bg-indigo-500" />

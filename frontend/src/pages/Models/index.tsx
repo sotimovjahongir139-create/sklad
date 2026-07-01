@@ -32,7 +32,7 @@ export default function Models() {
       <div className="flex items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Modellar</h1>
-          <p className="text-sm text-gray-500 mt-0.5">SKU va mahsulot katalogini boshqarish</p>
+          <p className="text-sm text-gray-500 mt-0.5">Model va mahsulot katalogini boshqarish</p>
         </div>
         {isManager && (
           <button onClick={() => { setSelectedModel(null); setShowForm(true); }} className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors">
@@ -48,7 +48,7 @@ export default function Models() {
             <input
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-              placeholder="Nom yoki SKU bo'yicha qidirish..."
+              placeholder="Nom yoki model raqami bo'yicha qidirish..."
               className="w-full pl-9 pr-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -66,7 +66,7 @@ export default function Models() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-200 dark:border-gray-800">
-                  {['SKU', 'Nomi', 'Kategoriya', 'Birlik', 'Min zaxira', 'Holati', ''].map((h) => (
+                  {['MODEL', 'Nomi', 'Kategoriya', 'Birlik', 'Min zaxira', 'Holati', ''].map((h) => (
                     <th key={h} className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{h}</th>
                   ))}
                 </tr>
@@ -74,7 +74,7 @@ export default function Models() {
               <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                 {models.map((model) => (
                   <tr key={model.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                    <td className="px-4 py-3 text-sm font-mono font-medium text-blue-600">{model.sku}</td>
+                    <td className="px-4 py-3 text-sm font-mono font-medium text-blue-600">{model.modelCode}</td>
                     <td className="px-4 py-3 text-sm text-gray-900 dark:text-white">{model.name}</td>
                     <td className="px-4 py-3 text-sm text-gray-500">{model.category || '—'}</td>
                     <td className="px-4 py-3 text-sm text-gray-500">{model.unit}</td>
@@ -90,7 +90,7 @@ export default function Models() {
                           <button onClick={() => { setSelectedModel(model); setShowForm(true); }} className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded text-gray-500 hover:text-blue-600 transition-colors">
                             <Edit2 size={14} />
                           </button>
-                          <button onClick={() => { if (confirm(`${model.sku} ni o'chirilsinmi?`)) deleteMutation.mutate(model.id); }} className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded text-gray-500 hover:text-red-600 transition-colors">
+                          <button onClick={() => { if (confirm(`${model.modelCode} ni o'chirilsinmi?`)) deleteMutation.mutate(model.id); }} className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded text-gray-500 hover:text-red-600 transition-colors">
                             <Trash2 size={14} />
                           </button>
                         </div>

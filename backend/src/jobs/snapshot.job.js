@@ -7,7 +7,7 @@ const takeSnapshot = async () => {
   try {
     const inventories = await prisma.inventory.findMany({
       where: { quantity: { gt: 0 } },
-      include: { model: { select: { sku: true, name: true, category: true } }, location: { select: { code: true } } },
+      include: { model: { select: { modelCode: true, name: true, category: true } }, location: { select: { code: true } } },
     });
 
     const totalQty = inventories.reduce((sum, i) => sum + i.quantity, 0);

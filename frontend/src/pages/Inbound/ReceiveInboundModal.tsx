@@ -51,7 +51,7 @@ export default function ReceiveInboundModal({ order, onClose, onSave }: Props) {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium">{orderItem.model?.name}</p>
-                  <p className="text-xs text-gray-400 font-mono">{orderItem.model?.sku}</p>
+                  <p className="text-xs text-gray-400 font-mono">{orderItem.model?.modelCode}</p>
                 </div>
                 <p className="text-xs text-gray-500">Kutilgan: {orderItem.expectedQty} · Qabul qilingan: {orderItem.receivedQty}</p>
               </div>

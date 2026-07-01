@@ -31,7 +31,7 @@ const getTurnover = async (days) => {
 
   const results = [];
   for (const m of outboundMovements) {
-    const model = await prisma.productModel.findUnique({ where: { id: m.modelId }, select: { sku: true, name: true, category: true } });
+    const model = await prisma.productModel.findUnique({ where: { id: m.modelId }, select: { modelCode: true, name: true, category: true } });
     const inv = await prisma.inventory.aggregate({ where: { modelId: m.modelId }, _sum: { quantity: true } });
     const avgInventory = inv._sum.quantity || 1;
     const outQty = m._sum.quantity || 0;
@@ -43,7 +43,7 @@ const getTurnover = async (days) => {
 
 const getDeadstock = async (days) => {
   const cutoff = subDays(new Date(), days);
-  const inventories = await prisma.inventory.findMany({ where: { quantity: { gt: 0 } }, include: { model: { select: { sku: true, name: true, category: true } }, location: { select: { code: true } } } });
+  const inventories = await prisma.inventory.findMany({ where: { quantity: { gt: 0 } }, include: { model: { select: { modelCode: true, name: true, category: true } }, location: { select: { code: true } } } });
 
   const results = [];
   for (const inv of inventories) {

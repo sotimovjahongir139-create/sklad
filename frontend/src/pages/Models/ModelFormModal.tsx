@@ -7,7 +7,7 @@ import { createModel, updateModel } from '@/services/api/models';
 import type { ProductModel } from '@/types';
 
 const schema = z.object({
-  sku: z.string().min(1, 'Majburiy'),
+  modelCode: z.string().min(1, 'Majburiy'),
   name: z.string().min(1, 'Majburiy'),
   description: z.string().optional(),
   category: z.string().optional(),
@@ -29,7 +29,7 @@ export default function ModelFormModal({ model, onClose, onSave }: Props) {
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: model
-      ? { sku: model.sku, name: model.name, description: model.description, category: model.category, unit: model.unit, minStock: model.minStock, maxStock: model.maxStock, weight: model.weight }
+      ? { modelCode: model.modelCode, name: model.name, description: model.description, category: model.category, unit: model.unit, minStock: model.minStock, maxStock: model.maxStock, weight: model.weight }
       : { unit: 'dona', minStock: 0 },
   });
 
@@ -58,7 +58,7 @@ export default function ModelFormModal({ model, onClose, onSave }: Props) {
 
         <form onSubmit={handleSubmit((d) => mutation.mutate(d))} className="p-6 space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <Field name="sku" label="SKU *" />
+            <Field name="modelCode" label="Model raqami *" />
             <Field name="unit" label="Birlik" />
           </div>
           <Field name="name" label="Nomi *" />

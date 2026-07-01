@@ -76,7 +76,7 @@ export default function Inbound() {
                     <div className="flex flex-wrap gap-2 mt-2">
                       {order.items.slice(0, 3).map((item) => (
                         <span key={item.id} className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded">
-                          {item.model?.sku}: {item.receivedQty}/{item.expectedQty}
+                          {item.model?.modelCode}: {item.receivedQty}/{item.expectedQty}
                         </span>
                       ))}
                       {order.items.length > 3 && <span className="text-xs text-gray-400">+{order.items.length - 3} ta</span>}
