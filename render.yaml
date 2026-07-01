@@ -4,8 +4,8 @@ services:
     env: node
     region: frankfurt
     plan: starter
-    buildCommand: cd backend && npm install && npx prisma generate && npx prisma db push
-    startCommand: cd backend && node src/server.js
+    buildCommand: cd backend && npm install && npx prisma generate
+    startCommand: cd backend && npx prisma db push && node src/server.js
     envVars:
       - key: NODE_ENV
         value: production
